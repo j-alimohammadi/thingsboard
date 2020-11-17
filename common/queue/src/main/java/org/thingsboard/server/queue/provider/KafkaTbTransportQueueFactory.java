@@ -17,6 +17,7 @@ package org.thingsboard.server.queue.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.thingsboard.server.gen.transport.TransportProtos.ToCoreMsg;
 import org.thingsboard.server.gen.transport.TransportProtos.ToRuleEngineMsg;
@@ -48,6 +49,9 @@ import javax.annotation.PreDestroy;
 @Slf4j
 public class KafkaTbTransportQueueFactory implements TbTransportQueueFactory {
 
+
+    private final Environment environment;
+
     private final TbKafkaSettings kafkaSettings;
     private final TbServiceInfoProvider serviceInfoProvider;
     private final TbQueueCoreSettings coreSettings;
@@ -60,13 +64,14 @@ public class KafkaTbTransportQueueFactory implements TbTransportQueueFactory {
     private final TbQueueAdmin transportApiAdmin;
     private final TbQueueAdmin notificationAdmin;
 
-    public KafkaTbTransportQueueFactory(TbKafkaSettings kafkaSettings,
+    public KafkaTbTransportQueueFactory(Environment environment, TbKafkaSettings kafkaSettings,
                                         TbServiceInfoProvider serviceInfoProvider,
                                         TbQueueCoreSettings coreSettings,
                                         TbQueueRuleEngineSettings ruleEngineSettings,
                                         TbQueueTransportApiSettings transportApiSettings,
                                         TbQueueTransportNotificationSettings transportNotificationSettings,
                                         TbKafkaTopicConfigs kafkaTopicConfigs) {
+        this.environment = environment;
         this.kafkaSettings = kafkaSettings;
         this.serviceInfoProvider = serviceInfoProvider;
         this.coreSettings = coreSettings;
